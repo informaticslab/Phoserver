@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1= title
+    form#formCheckUser(name="verifyuser",method="post",action="/verifyuser")
+        input#inputUserName(type="text", placeholder="username", name="username")
+        input#inputUserPassword(type="password", placeholder="userpassword", name="userpassword")
+        button#btnSubmit(type="submit") submit
