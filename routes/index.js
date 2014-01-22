@@ -36,7 +36,7 @@ exports.adduser = function(db) {
         console.log("password passed in was " + userPassword);
         
         //hash that password
-        var bcrypt = require('bcrypt');
+        var bcrypt = require('bcrypt-nodejs');
         // Generate a salt
         var salt = bcrypt.genSaltSync(10);
         // Hash the password with the salt
@@ -79,7 +79,7 @@ exports.verifyuser = function(db) {
          collection.findOne({username:userName}, function(e,doc){
            //console.log("user pulled back was " + doc.username);
            //console.log("hash pulled back was " + doc.passhash);
-           var bcrypt = require('bcrypt');
+           var bcrypt = require('bcrypt-nodejs');
            if(bcrypt.compareSync(userPassword, doc.passhash))
            {
                res.send("That was the correct password :D");
