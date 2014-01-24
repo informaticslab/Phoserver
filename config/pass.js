@@ -35,13 +35,14 @@ passport.use(new LocalStrategy(function(username, password, done) {
                 }); 
               }
               else{
-              token.update({token: Date.now});
+              token.update({token: Date.now,
+                            createdon: Date.now});
               token.save(function(err) {
                         if(err) {
                     console.log('Error: ' + err);
                     return done(false);
                     } else {
-                        console.log('updated token: ' + newtoken.username);
+                        console.log('updated token: ' + token.username);
                         //done();
                     }
                 }); 
