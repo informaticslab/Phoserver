@@ -28,7 +28,9 @@ var userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true},
-  admin: { type: Boolean, required: true }
+  admin: { type: Boolean, required: true },
+  token: {type:String, required:true, unique:true},
+  tokenTime: {type: Date, required: true, default: Date.now}
 });
 
 

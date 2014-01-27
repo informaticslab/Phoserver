@@ -28,6 +28,7 @@ app.configure(function() {
 app.get('/', basic_routes.index);
 
 // User pages
+
 app.get('/account', pass.ensureAuthenticated, user_routes.account);
 app.get('/login', user_routes.getlogin);
 app.post('/login', user_routes.postlogin);
