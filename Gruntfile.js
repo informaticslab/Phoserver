@@ -3,18 +3,19 @@ var db = require('./config/dbschema');
 module.exports = function(grunt) {
 
   grunt.registerTask('dbseed', 'seed the database', function() {
-    grunt.task.run('adduser:admin:admin@example.com:secret:true');
-    grunt.task.run('adduser:bob:bob@example.com:secret:false');
+    grunt.task.run('adduser:admin:admin@example.com:secret:true:05/27/81');
+    grunt.task.run('adduser:bob:bob@example.com:secret:false:05/27/82');
   });
 
-  grunt.registerTask('adduser', 'add a user to the database', function(usr, emailaddress, pass, adm) {
+  grunt.registerTask('adduser', 'add a user to the database', function(usr, emailaddress, pass, adm, apitoken) {
     // convert adm string to bool
     adm = (adm === "true");
 
     var user = new db.userModel({ username: usr
     				, email: emailaddress
     				, password: pass
-    				, admin: adm });
+    				, admin: adm
+                                , APItoken: apitoken});
     
     // save call is async, put grunt into async mode to work
     var done = this.async();

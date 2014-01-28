@@ -1,6 +1,8 @@
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
   , BearerStrategy = require('passport-http-bearer').Strategy
+  	,bcrypt = require('bcrypt-nodejs')
+	,SALT_WORK_FACTOR = 10
   , db = require('./dbschema');
 
 passport.serializeUser(function(user, done) {
@@ -20,38 +22,57 @@ passport.use(new LocalStrategy(function(username, password, done) {
     user.comparePassword(password, function(err, isMatch) {
       if (err) return done(err);
       if(isMatch) {
-          db.tokenModel.findOne({username:username}, function(err, token){ 
-              if(err) {return done(err);}
-              if(!token) {
-                                var newtoken = new db.tokenModel({ username: username		    
-                                            ,token: Date.now});
-                  newtoken.save(function(err) {
+          bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+		if(err) return next(err);
+                console.log('hashing token');
+		bcrypt.hash(Date.now, salt, null ,function(err, hash) {
+			if(err) return next(err);
+                         user.update({APItoken: hash,tokenTime: Date.now});
+          user.save( function(err) {
                         if(err) {
                     console.log('Error: ' + err);
                     return done(false);
                     } else {
-                        console.log('saved new token: ' + newtoken.username);
-                        //done();
+                        console.log('updated APItoken');
+                        return done(null, user);
                     }
                 }); 
-              }
-              else{
-              token.update({token: Date.now,
-                            createdon: Date.now});
-              token.save(function(err) {
-                        if(err) {
-                    console.log('Error: ' + err);
-                    return done(false);
-                    } else {
-                        console.log('updated token: ' + token.username);
-                        //done();
-                    }
-                }); 
-            }
-              
-                         
-        });
-        return done(null, user);
+			
+		});
+	});
+         
+//          db.tokenModel.findOne({username:username}, function(err, token){ 
+//              if(err) {return done(err);}
+//              if(!token) {
+//                                var newtoken = new db.tokenModel({ username: username		    
+//                                            ,token: Date.now});
+//                  newtoken.save(function(err) {
+//                        if(err) {
+//                    console.log('Error: ' + err);
+//                    return done(false);
+//                    } else {
+//                        console.log('saved new token: ' + newtoken.username);
+//                        //done();
+//                    }
+//                }); 
+//              }
+//              else{
+//              token.update({token: Date.now,
+//                            createdon: Date.now});
+//              token.save(function(err) {
+//                        if(err) {
+//                    console.log('Error: ' + err);
+//                    return done(false);
+//                    } else {
+//                        console.log('updated token: ' + token.username);
+//                        //done();
+//                    }
+//                }); 
+//            }
+//              
+//                         
+//        });
+       // return done(null, user);
         
       } else {
         return done(null, false, { message: 'Invalid password' });

@@ -29,7 +29,7 @@ var userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true},
   admin: { type: Boolean, required: true },
-  token: {type:String, required:true, unique:true},
+  APItoken: {type:String, required:true, unique:true},
   tokenTime: {type: Date, required: true, default: Date.now}
 });
 
@@ -37,7 +37,6 @@ var userSchema = new Schema({
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
 	var user = this;
-
 	if(!user.isModified('password')) return next();
 
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
