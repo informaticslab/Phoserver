@@ -81,6 +81,19 @@ passport.use(new LocalStrategy(function(username, password, done) {
   });
 }));
 
+//route for bearerstratege
+passport.use(new BearerStrategy(
+  function(token, done) {
+       console.log("Authenticating bearer with APItoken: "+token)
+    db.userModel.findOne({ APItoken: token }, function (err, user) {
+       
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      return done(null, user, { scope: 'all' });
+    });
+  }
+));
+
 // Simple route middleware to ensure user is authenticated.  Otherwise send to login page.
 exports.ensureAuthenticated = function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

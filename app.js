@@ -34,6 +34,11 @@ app.get('/login', user_routes.getlogin);
 app.post('/login', user_routes.postlogin);
 app.get('/admin', pass.ensureAuthenticated, pass.ensureAdmin(), user_routes.admin);
 app.get('/logout', user_routes.logout);
+app.get('/foo', 
+  passport.authenticate('bearer', { session: false }),
+  function(req, res) {
+    res.json(req.user);
+  });
 
 app.listen(3000, function() {
   console.log('Express server listening on port 3000');
