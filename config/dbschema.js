@@ -37,6 +37,7 @@ var userSchema = new Schema({
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
 	var user = this;
+
 	if(!user.isModified('password')) return next();
 
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
@@ -64,30 +65,30 @@ exports.userModel = userModel;
 
 
 // Token schema
-
-var tokenSchema = new Schema({
-    username: { type: String, required: true, unique: true },
-    token: { type: String, required: true, unique: true },
-    createdon: { type: Date, required: true, default: Date.now}
-})
-
-// Bcrypt middleware
-tokenSchema.pre('save', function(next) {
-	var tokenRecord = this;
-
-	if(!tokenRecord.isModified('token')) return next();
-
-	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-		if(err) return next(err);
-
-		bcrypt.hash(tokenRecord.token, salt, null ,function(err, hash) {
-			if(err) return next(err);
-			tokenRecord.token = hash;
-			next();
-		});
-	});
-});
-
-//Export token model
-var tokenModel = mongoose.model('token', tokenSchema);
-exports.tokenModel = tokenModel;
+//
+//var tokenSchema = new Schema({
+//    username: { type: String, required: true, unique: true },
+//    token: { type: String, required: true, unique: true },
+//    createdon: { type: Date, required: true, default: Date.now}
+//})
+//
+//// Bcrypt middleware
+//tokenSchema.pre('save', function(next) {
+//	var tokenRecord = this;
+//
+//	if(!tokenRecord.isModified('token')) return next();
+//
+//	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+//		if(err) return next(err);
+//
+//		bcrypt.hash(tokenRecord.token, salt, null ,function(err, hash) {
+//			if(err) return next(err);
+//			tokenRecord.token = hash;
+//			next();
+//		});
+//	});
+//});
+//
+////Export token model
+//var tokenModel = mongoose.model('token', tokenSchema);
+//exports.tokenModel = tokenModel;
