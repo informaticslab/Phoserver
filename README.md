@@ -1,6 +1,6 @@
-###This is a base-level server with simple, session based login that creates tokens that expire for API-level access. 
+###This is the server for Blob the Savior based on the Phoserver project 
 
-#### It grew from Jared Hansen's excellent passport-http-bearer example (https://github.com/jaredhanson/passport-http-bearer) and excellent passport-local express3-mongoose-multiple-file examples(https://github.com/jaredhanson/passport-local/tree/master/examples/express3-mongoose-multiple-files)
+#### It will allow users to login, get a token and then access the API to save articles.
 
 config/dbschema.js - mongoose database schema
 config/pass.js - contains most of the passport configuration, also contains additional admin middleware function and token generation during successful authentication.
