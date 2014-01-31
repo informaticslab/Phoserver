@@ -3,7 +3,8 @@ var passport = require('passport')
   , BearerStrategy = require('passport-http-bearer').Strategy
   	,bcrypt = require('bcrypt-nodejs')
 	,SALT_WORK_FACTOR = 10 
-  , db = require('./dbschema');
+  , db = require('./dbschema')
+  , expirationHours = 2;
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -27,7 +28,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
                 console.log('hashing token');
                 	bcrypt.hash(Date.now, salt, null ,function(err, hash) {
 			if(err) return next(err);
-                         user.update({APItoken: hash,tokenTime: Date.now});
+                         //user.update({APItoken: hash,tokenTime: Date.now});
                          user.APItoken = hash;
                          user.tokenTime = Date.now();
                          
@@ -59,7 +60,18 @@ passport.use(new BearerStrategy(
        
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
-      return done(null, user, { scope: 'all' });
+      var expiration = user.tokenTime; 
+       expiration.setHours( user.tokenTime.getHours()+expirationHours)
+      console.log("Comparing expiration of " + expiration + " to now of " +Date.now());
+      if(expiration >= Date.now() )
+      {
+            return done(null, user, { scope: 'all' });
+      }
+      else 
+      {
+          console.log("Token was expired");
+            return done("Token was expired", false);
+      }
     });
   }
 ));
