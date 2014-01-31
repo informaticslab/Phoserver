@@ -1,12 +1,14 @@
-###This is a very similar example as express3-mongoose example with a couple differences. 
+###This is a base-level server with simple, session based login that creates tokens that expire for API-level access. 
 
-#### 1. app.js is now split up into multiple files
+#### It grew from Jared Hansen's excellent passport-http-bearer example (https://github.com/jaredhanson/passport-http-bearer) and excellent passport-local express3-mongoose-multiple-file examples(https://github.com/jaredhanson/passport-local/tree/master/examples/express3-mongoose-multiple-files)
 
 config/dbschema.js - mongoose database schema
-config/pass.js - contains most of the passport configuration, also contains an additional admin middleware function
+config/pass.js - contains most of the passport configuration, also contains additional admin middleware function and token generation during successful authentication.
 
 routes/basic.js - basic routes paths
 routes/user.js - user paths (login, account, etc)
+
+/foo?access_token?[token] will allow a return on access token.  Modify or copy the foo route for your API as needed.
 
 app.js - main server code
 
