@@ -28,7 +28,8 @@ exports.findById = function(req, res) {
     var id = req.query.id;
     console.log('Retrieving article: ' + id);
     db.articleModel.findById(id, function (err, article) {
-    if(err)
+        console.log('article was ' + article);
+    if(err || !article)
     {
         res.send(err);        
     }
