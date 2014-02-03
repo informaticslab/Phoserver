@@ -64,31 +64,23 @@ var userModel = mongoose.model('User', userSchema);
 exports.userModel = userModel;
 
 
-// Token schema
-//
-//var tokenSchema = new Schema({
-//    username: { type: String, required: true, unique: true },
-//    token: { type: String, required: true, unique: true },
-//    createdon: { type: Date, required: true, default: Date.now}
-//})
-//
-//// Bcrypt middleware
-//tokenSchema.pre('save', function(next) {
-//	var tokenRecord = this;
-//
-//	if(!tokenRecord.isModified('token')) return next();
-//
-//	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-//		if(err) return next(err);
-//
-//		bcrypt.hash(tokenRecord.token, salt, null ,function(err, hash) {
-//			if(err) return next(err);
-//			tokenRecord.token = hash;
-//			next();
-//		});
-//	});
-//});
-//
-////Export token model
-//var tokenModel = mongoose.model('token', tokenSchema);
-//exports.tokenModel = tokenModel;
+//Article Schema
+var articleSchema = new Schema({
+  "issue-date": { type: String, required: true},
+  "issue-vol": { type: String, required: true},
+  "issue-no": { type: String, required: true},
+  "title": {type: String, required: true},
+  "already_known": {type: String, required: true},
+  "added_by_report":{type: String, required: true},
+  "implications":{type: String, required: true},
+  "url":{type: String, required: true},
+  "tags":[{
+      "tag":{type: String}
+  }],
+  "content-ver":{type: Number, required: true, default: 1}
+  ,"schema-ver":{type: Number, required: true, default: 1}
+});
+
+//Export article model
+var articleModel = mongoose.model('Article', articleSchema);
+exports.articleModel = articleModel;

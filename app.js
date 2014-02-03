@@ -4,7 +4,8 @@ var express = require('express')
   , pass = require('./config/pass')
   , passport = require('passport')
   , basic_routes = require('./routes/basic')
-  , user_routes = require('./routes/user');
+  , user_routes = require('./routes/user')
+  , article_routes = require('./routes/articles');
   
 // configure Express
 app.configure(function() {
@@ -39,6 +40,7 @@ app.get('/foo',
   function(req, res) {
     res.json(req.user);
   });
+  app.get('/articleByID', article_routes.findById);
 
 app.listen(3000, function() {
   console.log('Express server listening on port 3000');
