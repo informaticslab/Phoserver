@@ -10,8 +10,8 @@ var express = require('express')
 // configure Express
 app.configure(function() {
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.use(express.logger('dev'));
+  app.set('view engine', 'ejs'); 
+  app.use(express.logger('dev'));     /* 'default', 'short', 'tiny', 'dev' */
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -40,7 +40,14 @@ app.get('/foo',
   function(req, res) {
     res.json(req.user);
   });
-  app.get('/articleByID', article_routes.findById);
+app.get('/articles/:id', article_routes.findById);
+app.get('/articles', article_routes.findAll);
+app.post('/articles', passport.authenticate('bearer', { session: false }),
+  article_routes.addArticle);
+app.put('/articles/:id', passport.authenticate('bearer', { session: false }),
+  article_routes.updateArticle);
+app.delete('/articles/:id', passport.authenticate('bearer', { session: false }),
+  article_routes.deleteArticle);
 
 app.listen(3000, function() {
   console.log('Express server listening on port 3000');

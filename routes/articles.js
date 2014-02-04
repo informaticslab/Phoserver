@@ -1,31 +1,9 @@
 var db = require('../config/dbschema');
  
-// var gendb = monk('localhost:27017/photon-admin-server');
-//var db = gendb.get('articledb');
- 
-//var Server = mongo.Server,
-//    Db = mongo.Db,
-//    BSON = mongo.BSONPure;
-// 
-//var server = new Server('localhost', 27017, {auto_reconnect: true});
-//db = new Db('articledb', server);
- 
-//db.open(function(err, db) {
-//    if(!err) {
-//        console.log("Connected to 'articledb' database");
-//        db.collection('articles', {strict:true}, function(err, collection) {
-//            if (err) {
-//                console.log("The 'articles' collection doesn't exist. Creating it with sample data...");
-//                populateDB();
-//            }
-//        });
-//    }
-//});
- 
 exports.findById = function(req, res) {
-    console.log('inside route');
-    //var id = req.params.id;
-    var id = req.query.id;
+    //console.log('inside route');
+    var id = req.params.id;
+    //var id = req.query.id;
     console.log('Retrieving article: ' + id);
     db.articleModel.findById(id, function (err, article) {
         console.log('article was ' + article);
@@ -38,61 +16,64 @@ exports.findById = function(req, res) {
     
 };
  
-//exports.findAll = function(req, res) {
-//    db.collection('articles', function(err, collection) {
-//        collection.find().toArray(function(err, items) {
-//            res.send(items);
-//        });
-//    });
-//};
-// 
-//exports.addArticle= function(req, res) {
-//    var wine = req.body;
-//    console.log('Adding article: ' + JSON.stringify(article));
-//    db.collection('articles', function(err, collection) {
-//        collection.insert(article, {safe:true}, function(err, result) {
-//            if (err) {
-//                res.send({'error':'An error has occurred'});
-//            } else {
-//                console.log('Success: ' + JSON.stringify(result[0]));
-//                res.send(result[0]);
-//            }
-//        });
-//    });
-//}
-// 
-//exports.updateArticle = function(req, res) {
-//    var id = req.params.id;
-//    var wine = req.body;
-//    console.log('Updating article: ' + id);
-//    console.log(JSON.stringify(article));
-//    db.collection('articles', function(err, collection) {
-//        collection.update({'_id':new BSON.ObjectID(id)}, article, {safe:true}, function(err, result) {
-//            if (err) {
-//                console.log('Error updating article: ' + err);
-//                res.send({'error':'An error has occurred'});
-//            } else {
-//                console.log('' + result + ' document(s) updated');
-//                res.send(article);
-//            }
-//        });
-//    });
-//}
-// 
-//exports.deleteArticle = function(req, res) {
-//    var id = req.params.id;
-//    console.log('Deleting article: ' + id);
-//    db.collection('articles', function(err, collection) {
-//        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
-//            if (err) {
-//                res.send({'error':'An error has occurred - ' + err});
-//            } else {
-//                console.log('' + result + ' document(s) deleted');
-//                res.send(req.body);
-//            }
-//        });
-//    });
-//}
+exports.findAll = function(req, res) {
+   db.articleModel.find('articles', function(err, collection) {
+            if(err || !collection)
+            {
+                res.send(err);
+            }
+            res.send(collection);
+        });
+    
+};
+ 
+exports.addArticle= function(req, res) {
+    //console.log("adding article");
+    var articleblurb = req.body;
+    var article = new db.articleModel(articleblurb);
+    console.log('Saving article ');
+    // save call is async, put grunt into async mode to work
+
+    article.save(function(err, result) {
+      if(err) {
+        res.send('Error: ' + err);       
+      } else {
+        console.log('Success: ' + result[0]);
+        res.send(result[0]);
+      }
+    });
+};
+
+exports.updateArticle = function(req, res) {
+    var id = req.params.id;
+    var articleblob = req.body;
+    console.log('Updating article: ' + id);
+    //console.log(JSON.stringify(articleblob));
+    db.articleModel.update(id, articleblob, function (err, article) {
+        //console.log('article was ' + article);
+    if(err || !article)
+    {
+        res.send(err);        
+    }
+    res.send(article);
+  });
+};
+ 
+exports.deleteArticle = function(req, res) {
+    var id = req.params.id;
+    console.log('Deleting article: ' + id);
+        db.articleModel.findById(id, function (err, article) {
+        console.log('article was ' + article);
+        if(err || !article)
+        {
+            res.send({'error':'An error has occurred - ' + err});        
+        }
+        
+        article.remove();
+        console.log(' document(s) deleted');
+        res.send(req.body);
+  });
+};
 // 
 ///*--------------------------------------------------------------------------------------------------------------------*/
 //// Populate database with sample data -- Only used once: the first time the application is started.

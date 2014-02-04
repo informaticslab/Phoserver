@@ -8,7 +8,7 @@ config/pass.js - contains most of the passport configuration, also contains addi
 routes/basic.js - basic routes paths
 routes/user.js - user paths (login, account, etc)
 
-/foo?access_token?[token] will allow a return on access token.  Modify or copy the foo route for your API as needed.
+/foo?access_token=[token] will allow a return on access token.  Modify or copy the foo route for your API as needed.
 
 app.js - main server code
 
@@ -39,3 +39,7 @@ You can seed and drop the database with a grunt task by running the following co
 grunt dbseed
 grunt dbdrop
 ```
+
+#### 5.  Inscrutably useful references
+http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/
+http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/
