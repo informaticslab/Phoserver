@@ -4,6 +4,10 @@ exports.account = function(req, res) {
   res.render('account', { user: req.user });
 };
 
+exports.token = function (req, res) {
+  res.json(req.user.APItoken);
+};
+
 exports.getlogin = function(req, res) {
   res.render('login', { user: req.user, message: req.session.messages });
 };
