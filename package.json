@@ -8,7 +8,8 @@
     "passport-local": "~0.1.6",
     "passport-http-bearer": "*",
     "mongoose": "~3.5.5",
-    "bcrypt-nodejs": "*"
+    "bcrypt-nodejs": "*",
+    "connect" : "*"
   },
   "devDependencies": {
     "grunt": "~0.4.1"
