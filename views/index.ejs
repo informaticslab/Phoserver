@@ -3,5 +3,17 @@
 	<h2>Welcome! Please log in.</h2>
 <% } else { %>
 	<h2>Hello, <%= user.username %>.</h2>
+        <br>
+<input type="hidden" name="APItoken" id="APItoken" value="<%= user.APItoken %>" />
+
+<br><input type="button" id="btnSend" value="Send to Parent">
+  <script>
+    (function() {
+      document.getElementById("btnSend").onclick = function() {
+        opener.callback(document.getElementById("APItoken").value);
+      };
+    })();
+  </script>
+</script>
 <% } %>
 <% include footer %>

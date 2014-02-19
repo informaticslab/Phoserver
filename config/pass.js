@@ -95,5 +95,60 @@ exports.ensureAdmin = function ensureAdmin(req, res, next) {
     }
 }
 
+exports.token = function (req, res, next) {
+  //res.json(req.user.APItoken);
+  var userblurb = req.body;
+  //console.log(userblurb);
+   var username = userblurb.username;
+   //console.log('user is ' +username);
+   var password = userblurb.password;
+   //console.log('password is ' + password);
+  db.userModel.findOne({ username: username }, function(err, user) {
+    if (err) { res.send(err);
+    return next(err);}
+    if (!user) { res.send( 'Unknown user ' + username ); 
+    return next('Unknown user ' + username);}
+    user.comparePassword(password, function(err, isMatch) {
+      if (err) {res.send(err)
+      return next(err)};
+      if(isMatch) {
+          
+          bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+		if(err) {res.send(err);
+               return next(err) }
+                console.log('hashing token');
+                	bcrypt.hash(Date.now, salt, null ,function(err, hash) {
+			if(err) {res.send(err);
+                        return next(err)}
+                         //user.update({APItoken: hash,tokenTime: Date.now});
+
+                         user.APItoken = hash;
+                         user.tokenTime = Date.now();
+                         var APItoken = {
+                             "APItoken":user.APItoken,
+                             "tokenTime":user.tokenTime
+                         }
+          user.save( function(err) {
+                        if(err) {
+                    console.log('Error saving user token: ' + err);
+                    res.send(err);
+                    return next(err);
+                    } else {
+                        console.log('saved new token');
+                       
+                        res.send(APItoken);
+                    }
+                }); 
+			
+		});
+	});
+        
+      } else {
+        return done(null, false, { message: 'Invalid password' });
+      }
+    });
+  });
+
+};
 
 
