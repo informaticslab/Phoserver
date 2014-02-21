@@ -23,7 +23,7 @@ var express = require('express')
   
 // configure Express
 app.configure(function() {
-    app.use(allowCrossDomain);
+  app.use(allowCrossDomain);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs'); 
   app.use(express.logger('dev'));     /* 'default', 'short', 'tiny', 'dev' */
@@ -58,7 +58,7 @@ app.get('/logout', user_routes.logout);
 
 //App pages
 
-app.get('/token', pass.token);
+app.post('/token', pass.token);
 app.get('/foo', 
   passport.authenticate('bearer', { session: false }),
   function(req, res) {

@@ -97,11 +97,13 @@ exports.ensureAdmin = function ensureAdmin(req, res, next) {
 
 exports.token = function (req, res, next) {
   //res.json(req.user.APItoken);
- // var userblurb = req.body;
+  var userblurb = req.body;
   //console.log(userblurb);
-   var username = req.query.username;
+   //var username = req.query.username;
+   var username = userblurb.Credentials[0].username;
    //console.log('user is ' +username);
-   var password = req.query.password;
+   //var password = req.query.password;
+   var password = userblurb.Credentials[0].password;
    //console.log('password is ' + password);
   db.userModel.findOne({ username: username }, function(err, user) {
     if (err) { res.send(err);
