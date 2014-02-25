@@ -1,6 +1,5 @@
 Phoserver
 ===========
-The Rapid MMWR iPhone app provides quick access to highlights from each article in the MMWR Weekly. 
 
 Issue tracker is available: TBD
 
